@@ -16,7 +16,7 @@ A beautiful and robust package updater for macOS that manages Homebrew, uv, and 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/update_packages.git
+git clone https://github.com/limmutable/update_packages.git
 cd update_packages
 
 # Make the script executable
