@@ -56,3 +56,50 @@ env/
 tmp/
 temp/
 *.tmp
+
+# Security and credentials
+.env
+.env.*
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+known_hosts
+authorized_keys
+.ssh/
+.gnupg/
+
+# API keys and tokens
+.npmrc
+.pypirc
+.netrc
+.git-credentials
+credentials.json
+secrets.json
+config.json
+auth.json
+
+# Local configuration
+local.config
+local.settings.json
+*.local
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache directories
+.cache/
+cache/
+
+# History files
+.bash_history
+.zsh_history
+.python_history
