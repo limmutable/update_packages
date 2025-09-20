@@ -79,7 +79,7 @@ print() { $QUIET && return 0; printf "%b\n" "$1"; }
 msg()   { print "$1"; }
 
 header()   { $QUIET && return 0; printf "%b\n" "${BOLD}${FG_BLUE}🔄 ${1}${RESET}"; printf "%b\n" "${DIM}$(printf '%.0s=' {1..38})${RESET}"; }
-section()  { $QUIET && return 0; printf "%b\n" "${BOLD}${FG_MAGENTA}${1}${RESET}"; printf "%b\n" "${DIM}$(printf '%.0s-' {1..38})${RESET}"; }
+section()  { $QUIET && return 0; printf "%b\n" "${DIM}$(printf '%.0s-' {1..38})${RESET}"; printf "%b\n" "${BOLD}${FG_MAGENTA}${1}${RESET}"; }
 info()     { $QUIET && return 0; printf "%b\n" "${FG_CYAN}ℹ️  ${1}${RESET}"; }
 success()  { printf "%b\n" "${FG_GREEN}✅ ${1}${RESET}"; }
 warn()     { printf "%b\n" "${FG_YELLOW}⚠️  ${1}${RESET}"; }
@@ -207,8 +207,8 @@ count_uv_tools_outdated() {
 }
 
 count_pip_outdated() {
-  if command_exists pip; then
-    pip list --outdated --format=json 2>/dev/null | python -c "import json,sys; print(len(json.load(sys.stdin)))" 2>/dev/null || echo "0"
+  if command_exists pip3; then
+    pip3 list --outdated --format=json 2>/dev/null | python3 -c "import json,sys; print(len(json.load(sys.stdin)))" 2>/dev/null || echo "0"
   else
     echo "0"
   fi
@@ -232,8 +232,8 @@ get_uv_version() {
 }
 
 get_pip_version() {
-  if command_exists pip; then
-    pip --version 2>/dev/null | cut -d' ' -f2 || echo "unknown"
+  if command_exists pip3; then
+    pip3 --version 2>/dev/null | cut -d' ' -f2 || echo "unknown"
   else
     echo "N/A"
   fi
@@ -357,19 +357,19 @@ fi
 # pip
 # -----------------------------
 if [[ -z "$ONLY" || "$ONLY" == "pip" ]]; then
-  section "🐍 pip"
-  if command_exists pip; then
+  section "🐍 pip3"
+  if command_exists pip3; then
     RAN_PIP=true
     s=$(timer_start)
     if $DRY_RUN; then
-      info "Would run: python -m pip install --upgrade pip"
+      info "Would run: python3 -m pip install --upgrade --user --break-system-packages pip"
     else
-      run_cmd_with_spinner "upgrade pip itself" python -m pip install --upgrade pip
+      run_cmd_with_spinner "upgrade pip itself" python3 -m pip install --upgrade --user --break-system-packages pip
     fi
 
     # Upgrade all outdated packages
     if $DRY_RUN; then
-      info "Would check: pip list --outdated --format=json and upgrade each"
+      info "Would check: pip3 list --outdated --format=json and upgrade each"
     else
       info "Checking for outdated pip packages..."
       
@@ -380,7 +380,7 @@ if [[ -z "$ONLY" || "$ONLY" == "pip" ]]; then
         info "Found $outdated_count package(s) to update"
         
         # Get the list of outdated packages
-        mapfile -t outdated < <(pip list --outdated --format=json 2>/dev/null | python -c "import json,sys; data=json.load(sys.stdin); print('\n'.join(p['name'] for p in data) if data else '')" 2>/dev/null || true)
+        mapfile -t outdated < <(pip3 list --outdated --format=json 2>/dev/null | python3 -c "import json,sys; data=json.load(sys.stdin); print('\n'.join(p['name'] for p in data) if data else '')" 2>/dev/null || true)
         
         # Filter out empty strings
         outdated=("${outdated[@]//}")
@@ -391,7 +391,7 @@ if [[ -z "$ONLY" || "$ONLY" == "pip" ]]; then
         for pkg in "${outdated[@]}"; do
           if [[ -n "$pkg" ]]; then
             current=$((current + 1))
-            run_cmd_with_spinner "pip install -U ${pkg} ($current/$outdated_count)" pip install -U "$pkg"
+            run_cmd_with_spinner "pip3 install -U ${pkg} ($current/$outdated_count)" pip3 install --user --break-system-packages -U "$pkg"
           fi
         done
         success "pip packages updated ($outdated_count upgraded)"
@@ -401,7 +401,7 @@ if [[ -z "$ONLY" || "$ONLY" == "pip" ]]; then
     fi
     info "Completed in $(elapsed "$s")s"
   else
-    warn "pip not found. Skipping."
+    warn "pip3 not found. Skipping."
   fi
 fi
 
