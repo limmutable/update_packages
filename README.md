@@ -1,6 +1,8 @@
 # update_packages
 
-A beautiful and robust package updater for macOS that manages Homebrew, uv, and pip updates with style.
+An **independent shell script** that provides a beautiful and robust package updater for macOS, managing Homebrew, uv, and pip updates with style.
+
+> **Note**: This project focuses exclusively on package management. For comprehensive shell environment setup including aliases, functions, pre-commit hooks, Python environment management, and zsh customizations, see the [dotfiles project](https://github.com/limmutable/dotfiles) - a complete development environment configuration for macOS with ARM64 optimization, UV integration, and productivity enhancements.
 
 ## Features
 
